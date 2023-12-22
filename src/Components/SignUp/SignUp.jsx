@@ -24,7 +24,7 @@ const SignUp = () => {
       return toast.error(" password should be more than 6 characters");
     } else if (/^[^A-Z]*$/.test(password)) {
       return toast.error("Password must be have at least one capital letter");
-    } else if (/^[^!@#$%^&*()_+{}\[\]:;<>,.?~\\-]*$/.test(password)) {
+    } else if (/^[^!@#$%^&*()_+{}[\]:;<>,.?~\\-]*$/.test(password)) {
       return toast.error("Special character must be included in password");
     }
     createUser(email, password)
@@ -36,7 +36,7 @@ const SignUp = () => {
           return toast.error(
             "Password must be have at least one capital letter"
           );
-        } else if (/^[^!@#$%^&*()_+{}\[\]:;<>,.?~\\-]*$/.test(password)) {
+        } else if (/^[^!@#$%^&*()_+{}[\]:;<>,.?~\\-]*$/.test(password)) {
           return toast.error("Special character must be included in password");
         }
 

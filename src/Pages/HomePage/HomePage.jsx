@@ -7,6 +7,7 @@ const HomePage = () => {
         <div className=" space-y-28">
           <Banner></Banner>
           <UserTypesSection></UserTypesSection>
+          
         </div>
     );
 };

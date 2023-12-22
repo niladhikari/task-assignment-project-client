@@ -1,48 +1,50 @@
-// CreateTaskForm.js
+
+
+
 
 import { useForm } from "react-hook-form";
 import UseAxiosDefault from "../../Hooks/UseAxiosDefault";
-import toast, { Toaster } from "react-hot-toast";
-import { useContext } from "react";
-import { AuthContext } from "../../Providers/AuthProvider";
-import Navbar from "../Navbar/Navbar";
 
-const CreateTask = () => {
+
+import { useLoaderData } from "react-router-dom";
+import Swal from "sweetalert2";
+
+
+const Update = () => {
   const defaultAxios = UseAxiosDefault();
-  const { user } = useContext(AuthContext);
+  const {_id,taskTitle,taskDescription,taskDeadline,taskPriority} = useLoaderData();
   const {
     register,
     handleSubmit,
-    setValue,
+    reset,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    data.email = user?.email;
-    console.log("Submitted data:", data);
-    setValue("taskTitle", "");
-    setValue("taskDescription", "");
-    setValue("taskDeadline", "");
-    setValue("taskPriority", "");
-    if (data && data.email) {
-      defaultAxios.post("/task", data).then((res) => {
-        console.log(res.data);
-        if (res.data.insertedId) {
-          toast.success("you have successfully created a task");
-        }
-      });
-    }
+  const onSubmit =async (data) => {
+    const taskItem = {
+        taskTitle: data.taskTitle,
+        taskDeadline: data.taskDeadline,
+        taskPriority: data.taskPriority,
+        taskDescription: data.taskDescription,
+      };
+      const menuRes = await defaultAxios.put(`/tasks/${_id}`, taskItem);
+
+      if (menuRes.data.modifiedCount > 0) {
+        // show success popup
+        reset();
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: `Task is updated.`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
   };
 
   return (
     <>
-      <Toaster
-        position="top-center"
-        reverseOrder={false}
-        toastOptions={{ className: " text-center" }}
-      />
       <div>
-        <Navbar></Navbar>
         <div className="max-w-md mx-auto mt-8 p-6 bg-white shadow-md rounded-md">
           <h2 className="text-2xl font-semibold mb-4">Create New Task</h2>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -57,6 +59,7 @@ const CreateTask = () => {
                 type="text"
                 id="taskTitle"
                 name="taskTitle"
+                defaultValue={taskTitle}
                 {...register("taskTitle", {
                   required: "Task title is required",
                 })}
@@ -81,6 +84,7 @@ const CreateTask = () => {
               </label>
               <textarea
                 id="taskDescription"
+                defaultValue={taskDescription}
                 name="taskDescription"
                 {...register("taskDescription", {
                   required: "Task description is required",
@@ -110,6 +114,7 @@ const CreateTask = () => {
               <input
                 type="date"
                 id="taskDeadline"
+                defaultValue={taskDeadline}
                 name="taskDeadline"
                 {...register("taskDeadline", {
                   required: "Task deadline is required",
@@ -136,6 +141,7 @@ const CreateTask = () => {
               <select
                 id="taskPriority"
                 name="taskPriority"
+                defaultValue={taskPriority}
                 {...register("taskPriority", {
                   required: "Task priority is required",
                 })}
@@ -163,7 +169,7 @@ const CreateTask = () => {
                 type="submit"
                 className="bg-black text-white p-2 rounded-md hover:bg-black focus:outline-none focus:shadow-outline-black "
               >
-                Create Task
+                Update Task
               </button>
             </div>
           </form>
@@ -173,4 +179,4 @@ const CreateTask = () => {
   );
 };
 
-export default CreateTask;
+export default Update;
