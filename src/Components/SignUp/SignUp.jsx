@@ -1,16 +1,16 @@
 import { updateProfile } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
-
 import toast, { Toaster } from "react-hot-toast";
-
+import { IoLogoGithub } from "react-icons/io";
 import { AiOutlineGoogle } from "react-icons/ai";
-
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
 import auth from "../../firebase/firebase.config";
 
+
 const SignUp = () => {
-  const { createUser, userWithGoogle } = useContext(AuthContext);
+  const { createUser, userWithGoogle, userWithGithub } =
+    useContext(AuthContext);
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -72,10 +72,20 @@ const SignUp = () => {
         console.error(error.code);
       });
   };
-
+  const handleGithub = () => {
+    userWithGithub()
+      .then((data) => {
+        console.log(data);
+        navigate("/dashboard");
+      })
+      .catch((error) => {
+        console.error(error.code);
+      });
+  };
   return (
     <div className="relative">
-      <div className=""></div>
+      <div className="">
+      </div>
       <div className="linear absolute w-[100%] top-[2%]  pb-[10%] ">
         <Toaster
           position="top-right"
@@ -88,7 +98,7 @@ const SignUp = () => {
         <div className="w-[80%]  lg:w-[35%] mx-auto">
           <div className="hero w-full  bg-base-200">
             <div className=" w-full flex-col ">
-              <div className=" flex-shrink-0 w-full   h-auto shadow-2xl bg-base-100">
+              <div className=" flex-shrink-0 w-full shadow-xl  h-auto shadow-2xl bg-base-100">
                 <form
                   onSubmit={handleSubmit}
                   className="card-body w-full h-auto"
@@ -158,13 +168,24 @@ const SignUp = () => {
 
                   <button
                     onClick={handleGoogle}
-                    className="text-red mt-5     text-center hover:before:bg-red rounded-xl font-semibold  relative py-3 w-full overflow-hidden border border-black text-black  bg-white px-3 md:px-16  shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0   before:transition-all before:duration-200 before:border-none before:text-black hover:text-black hover:border-none hover:d-400 hover:before:left-0 hover:before:w-full"
+                    className="text-red mt-5     text-center hover:before:bg-red rounded-xl font-semibold  relative py-3 w-full overflow-hidden border border-black text-black  bg-white px-3 md:px-16  shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-green-400 before:transition-all before:duration-200 before:border-none before:text-black hover:text-black hover:border-none hover:d-400 hover:before:left-0 hover:before:w-full"
                   >
                     <span className="relative z-10 gap-2 w-max mx-auto flex items-center">
                       <span className="">
                         <AiOutlineGoogle></AiOutlineGoogle>
                       </span>
                       Continue with Goggle
+                    </span>
+                  </button>
+                  <button
+                    onClick={handleGithub}
+                    className="text-red mt-5     text-center hover:before:bg-red rounded-xl font-semibold  relative py-3 w-full overflow-hidden border border-black text-black  bg-white px-3 md:px-16  shadow-2xl transition-all before:absolute before:bottom-0 before:left-0 before:top-0 before:z-0 before:h-full before:w-0 before:bg-black  before:transition-all before:duration-200 hover:text-white hover:d-400 hover:before:left-0 hover:before:w-full"
+                  >
+                    <span className="relative z-10 gap-2 w-max mx-auto flex items-center">
+                      <span className="">
+                        <IoLogoGithub />
+                      </span>
+                      Continue with Github
                     </span>
                   </button>
                 </form>
